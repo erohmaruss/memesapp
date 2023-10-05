@@ -1,0 +1,38 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    ext {
+        buildToolsVersion = "33.0.0"
+        minSdkVersion = 21
+        compileSdkVersion = 33
+        targetSdkVersion = 33
+
+        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
+        ndkVersion = "23.1.7779620"
+    }
+    repositories {
+        google()
+        // jcenter()
+        mavenCentral()
+        // maven { url 'https://www.jitpack.io' }
+        // maven { url 'https://maven.google.com' }
+        // maven { url 'https://repo.maven.apache.org/maven2' }
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+    }
+}
+
+allprojects {
+    repositories {
+        // ... другие репозитории
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+
+// dependencies {
+//     implementation("com.facebook.fresco:fresco:2.5.0")
+//     implementation('com.github.adityaxjha:Android-ScalableVideoView:10e7b4da8b')
+// }
