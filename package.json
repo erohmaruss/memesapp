@@ -10,6 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-firebase/admob": "^11.5.0",
+    "@react-native-firebase/app": "^11.5.0",
     "axios": "^1.5.1",
     "react": "18.2.0",
     "react-native": "0.72.5",
