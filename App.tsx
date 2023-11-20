@@ -7,12 +7,14 @@ import {
   Image,
   TouchableOpacity,
   Share,
+  Button
 } from 'react-native';
 import axios from 'axios';
 import Video from 'react-native-video';
 import * as Animatable from 'react-native-animatable';
 import RNFS from 'react-native-fs';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { InterstitialAd, AdEventType, TestIds } from '@react-native-firebase/admob';
 
 function App() {
   const [data, setData] = useState(null);
@@ -70,11 +72,22 @@ function App() {
   const onArrowPressRight = () => {
     onSwipeLeft();
   };
-
+  // const adUnitId = 'ca-app-pub-2189745975070036~8512489841'; 
+  // const interstitial = InterstitialAd.createForAdRequest(adUnitId);
   useEffect(() => {
-    fetchData();
-  }, []);
+    const eventListener = interstitial.onAdEvent((type, error) => {
+      // if (type === AdEventType.LOADED) {
+      //   interstitial.show();
+      // }
+      // interstitial.load();
+      fetchData();
+      // return () => {
+      //   eventListener();
+      // };
+    });
 
+  }, []);
+  
   return (
     <SafeAreaView style={styles.container}>
       <GestureRecognizer
@@ -82,6 +95,7 @@ function App() {
         onSwipeRight={onSwipeRight}
         style={styles.container}
       >
+        
         <TouchableOpacity style={styles.leftArrow} onPress={onArrowPressLeft}>
           <Text style={styles.arrowText}>&#8592;</Text>
         </TouchableOpacity>
