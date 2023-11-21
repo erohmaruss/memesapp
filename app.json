@@ -1,4 +1,8 @@
 {
   "name": "TestProject",
-  "displayName": "TestProject"
+  "displayName": "TestProject",
+
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-2189745975070036~8512489841"
+  }
 }

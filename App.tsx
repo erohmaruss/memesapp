@@ -13,8 +13,15 @@ import Video from 'react-native-video';
 import * as Animatable from 'react-native-animatable';
 import RNFS from 'react-native-fs';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import { InterstitialAd, AdEventType, TestIds, MobileAds } from 'react-native-google-mobile-ads';
 
 function App() {
+
+  const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-2189745975070036~8512489841';
+  const interstitial = InterstitialAd.createForAdRequest(adUnitId);
+
+  const [pageSwipes, setPageSwipes] = useState(0);
+
   const [data, setData] = useState(null);
   const [mediaUri, setMediaUri] = useState(null);
   const [previousFilePath, setPreviousFilePath] = useState(null);
@@ -29,6 +36,19 @@ function App() {
     }
   };
 
+  const showAdIfNeeded = () => {
+    console.log('PAGE ', pageSwipes);
+    setPageSwipes(pageSwipes + 1);
+
+
+    //if (pageSwipes >= 3 && interstitial.loaded) {
+    if (pageSwipes >= 3) {
+      setPageSwipes(0);
+      interstitial.load();
+      console.log('PAGE 0');
+    }
+  };
+
   const fetchData = async () => {
     try {
       // Удалить предыдущий файл видео, если он существует
@@ -38,7 +58,7 @@ function App() {
       }
 
       const response = await axios.get('http://10.0.2.2:8080/getmessage');
-      console.log('Data fetched:', response.data);
+      // console.log('Data fetched:', response.data);
       setData(response.data);
 
       if (response.data.fileType.includes('video')) {
@@ -57,10 +77,12 @@ function App() {
 
   const onSwipeLeft = () => {
     fetchData();
+    showAdIfNeeded();
   };
 
   const onSwipeRight = () => {
     fetchData();
+    showAdIfNeeded();
   };
 
   const onArrowPressLeft = () => {
@@ -71,9 +93,31 @@ function App() {
     onSwipeLeft();
   };
 
+  
+  const eventListener = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+      interstitial.show(); 
+      console.log('Показываем рекламу 1');
+  });
+  
+
   useEffect(() => {
+    console.log('BEGIN');
+    MobileAds()
+    .initialize()
+    .then(adapterStatuses => {
+      // Initialization complete!
+      console.log('Ads SDK initialization complete', adapterStatuses);
+    })
+    .catch(ex => console.log('Errorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr', ex));
+
     fetchData();
+
+
+    // console.log('Загружаем рекламу 1');
+    // interstitial.load();
+
   }, []);
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -108,7 +152,7 @@ function App() {
                     console.log("Video onError", e);
                   }}
                   onLoad={(e) => {
-                    console.log("Video onLoad", e);
+                    // console.log("Video onLoad", e);
                   }}
                   repeat={true}
                 />
