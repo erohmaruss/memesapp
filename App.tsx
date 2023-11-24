@@ -72,14 +72,14 @@ function App() {
   const onArrowPressRight = () => {
     onSwipeLeft();
   };
-  // const adUnitId = 'ca-app-pub-2189745975070036~8512489841'; 
-  // const interstitial = InterstitialAd.createForAdRequest(adUnitId);
+  const adUnitId = 'ca-app-pub-2189745975070036~8512489841'; 
+  const interstitial = InterstitialAd.createForAdRequest(adUnitId);
   useEffect(() => {
     const eventListener = interstitial.onAdEvent((type, error) => {
-      // if (type === AdEventType.LOADED) {
-      //   interstitial.show();
-      // }
-      // interstitial.load();
+      if (type === AdEventType.LOADED) {
+        interstitial.show();
+      }
+      interstitial.load();
       fetchData();
       // return () => {
       //   eventListener();
